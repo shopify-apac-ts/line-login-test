@@ -1,12 +1,12 @@
 # LINE LOGIN TEST
-## Experimental Hydrogen store hosting LINE Login -> Shopify Online Store login using Multipass.
+Experimental Hydrogen store hosting LINE Login -> Shopify Online Store login using Multipass.
 
-Disclaimer
+## Disclaimer
 This repository and its contents are not an officially supported Shopify product.
 This code is fully unofficial and NOT guaranteed to pass the public app review for Shopify app store. The official requirements are described here.
 You need to follow Shopify API Licene and Terms of Use even for custom app usage.
 This code is supposed to be used as tutorial mainly for demonstrating how to develop a Shopify app and does NOT guarantee that all security concerns are taken care of such as this one. If you use this code for production, all resposibilties are owned by you and you should check the license first.
-License
+## License
 All solutions within this repository are provided under the MIT license. Please see the LICENSE file for more detailed terms and conditions.
 
 # Hydrogen template: Skeleton
