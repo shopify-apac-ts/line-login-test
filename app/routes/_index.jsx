@@ -33,6 +33,17 @@ export default function Homepage() {
   );
 }
 
+function Homepage_original() {
+  /** @type {LoaderReturnData} */
+  const data = useLoaderData();
+  return (
+    <div className="home">
+      <FeaturedCollection collection={data.featuredCollection} />
+      <RecommendedProducts products={data.recommendedProducts} />
+    </div>
+  );
+}
+
 /**
  * @param {{
  *   collection: FeaturedCollectionFragment;
