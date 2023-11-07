@@ -12,7 +12,7 @@ export default function Login() {
 
   return (
     <div className="login">
-      <h1>Sign in with LINE Login.</h1>
+      <h1>LINE Login process completed! See URL parameters for the result.</h1>
     </div>
   );
 }
