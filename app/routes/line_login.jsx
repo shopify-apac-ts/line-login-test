@@ -1,5 +1,5 @@
-import {json, redirect} from '@shopify/remix-oxygen';
-import {Form, Link, useActionData} from '@remix-run/react';
+import {json, redirect, defer} from '@shopify/remix-oxygen';
+import {Form, Link, useActionData, useLoaderData} from '@remix-run/react';
 
 /**
  * @type {MetaFunction}
@@ -9,15 +9,16 @@ export const meta = () => {
 };
 
 /** We come here after LINE Login redirect */
-export async function action({request, context}) {
+export async function loader({request, context}) {
+
   /** LINE access token endpoint - 
       https://developers.line.biz/ja/reference/line-login/#issue-access-token
   */
   const lineAccessTokenUrl = new URL(`https://api.line.me/oauth2/v2.1/token`);
   const code = new URL(request.url).searchParams.get('code');
   const state = new URL(request.url).searchParams.get('state');
-  /* TODO: state identification */
-
+  // TODO: state identification
+  
   const headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
   };
@@ -35,6 +36,8 @@ export async function action({request, context}) {
     body,
   });
 
+  console.log("response", response);
+  
   if (!response.ok) {
     throw new Error(await response.text());
   }
@@ -47,21 +50,15 @@ export async function action({request, context}) {
   context.session.set('line_id_token', id_token);
   context.session.set('line_refresh_token', refresh_token);
 
-  //
-}
-
-export async function loader({context}) {
-  const line_access_token = context.session.get('line_access_token');
-  const line_token_expires_in = context.session.get('line_token_expires_in');
-  const line_id_token = context.session.get('line_id_token');
-  const line_refresh_token = context.session.get('line_refresh_token');
-
-  return defer({line_access_token, line_token_expires_in, line_id_token, line_refresh_token});
+  return defer({request, context, access_token, expires_in, id_token, refresh_token});
+//  return defer({request, context, headers, body, code, state});
 }
 
 export default function Login() {
-  const data = useLoaderData();
-  console.log("data", data);
+  const loaderData = useLoaderData();
+  console.log("loaderData", loaderData);
+//  const actionData = useActionData();
+//  console.log("actionData", actionData);
 
   return (
     <div className="login">
