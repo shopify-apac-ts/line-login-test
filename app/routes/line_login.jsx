@@ -1,5 +1,6 @@
 import {json, redirect, defer} from '@shopify/remix-oxygen';
 import {Form, Link, useActionData, useLoaderData} from '@remix-run/react';
+import { Multipass } from '~/lib/multipass';
 
 /**
  * @type {MetaFunction}
@@ -35,7 +36,6 @@ export async function loader({request, context}) {
     headers,
     body,
   });
-
   console.log("response", response);
   
   if (!response.ok) {
@@ -44,7 +44,6 @@ export async function loader({request, context}) {
 
   const {access_token, expires_in, id_token, refresh_token} =
     await response.json();
-
   context.session.set('line_access_token', access_token);
   context.session.set('line_token_expires_in', expires_in);
   context.session.set('line_id_token', id_token);
@@ -64,7 +63,6 @@ export async function loader({request, context}) {
     headers,
     body: body2,
   });
-
   console.log("response2", response2);
 
   if (!response2.ok) {
@@ -76,7 +74,20 @@ export async function loader({request, context}) {
   context.session.set('line_name', name);
   context.session.set('line_email', email);
 
-  return defer({request, context, access_token, expires_in, id_token, refresh_token, sub, name, email});
+//  return defer({request, context, access_token, expires_in, id_token, refresh_token, sub, name, email});
+
+  /** Multipass token generation and redirect into Online Store
+   *  https://shopify.dev/docs/api/multipass
+   */
+  const multipass = new Multipass(context.env.MULTIPASS_SECRET);
+  const customerData = {
+    email,
+    tag_string: `line_id:${sub}, line_name:${name}`,
+  };
+  const token = multipass.generateToken(customerData);
+  const store_url = `${context.env.ONLINESTORE_URL}account/login/multipass/${token}`;
+
+  return redirect(store_url);
 }
 
 export default function Login() {
