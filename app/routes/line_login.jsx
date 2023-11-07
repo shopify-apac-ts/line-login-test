@@ -24,9 +24,9 @@ export async function loader({request, context}) {
   };
 
   const body = new URLSearchParams();
-  body.append('grant_type', 'authorization_code');
+  body.set('grant_type', 'authorization_code');
   body.append('code', code);
-  body.append('redirect_uri', context.env.REDIRECT_URI);
+  body.append('redirect_uri', context.env.LINELOGIN_REDIRECT_URI);
   body.append('client_id', context.env.LINELOGIN_CLIENTID);
   body.append('client_secret', context.env.LINELOGIN_CLIENTSECRET);
 
@@ -51,7 +51,6 @@ export async function loader({request, context}) {
   context.session.set('line_refresh_token', refresh_token);
 
   return defer({request, context, access_token, expires_in, id_token, refresh_token});
-//  return defer({request, context, headers, body, code, state});
 }
 
 export default function Login() {

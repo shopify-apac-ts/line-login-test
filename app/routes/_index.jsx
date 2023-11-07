@@ -22,7 +22,10 @@ export default function Homepage() {
   /** @type {LoaderReturnData} */
   const data = useLoaderData();
 //  console.log("env", data.env);
-  const line_login_url = `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${data.env.LINELOGIN_CLIENTID}&redirect_uri=${data.env.REDIRECT_URI}&state=12345abcde&scope=profile%20openid%20email`;
+  const encoded_redirect_uri = encodeURIComponent(data.env.LINELOGIN_REDIRECT_URI);
+//  console.log("encoded_redirect_uri", encoded_redirect_uri);
+
+  const line_login_url = `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${data.env.LINELOGIN_CLIENTID}&redirect_uri=${encoded_redirect_uri}&state=12345abcde&scope=profile%20openid%20email`;
   console.log("line_login_url", line_login_url);
 
   return (
