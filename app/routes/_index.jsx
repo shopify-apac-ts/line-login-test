@@ -14,21 +14,27 @@ export const meta = () => {
  * @param {LoaderFunctionArgs}
  */
 export async function loader({context}) {
-  const {storefront} = context;
-  const {collections} = await storefront.query(FEATURED_COLLECTION_QUERY);
-  const featuredCollection = collections.nodes[0];
-  const recommendedProducts = storefront.query(RECOMMENDED_PRODUCTS_QUERY);
+//  const {storefront} = context;
+//  const {collections} = await storefront.query(FEATURED_COLLECTION_QUERY);
+//  const featuredCollection = collections.nodes[0];
+//  const recommendedProducts = storefront.query(RECOMMENDED_PRODUCTS_QUERY);
+  const env = context.env;
 
-  return defer({featuredCollection, recommendedProducts});
+//  return defer({featuredCollection, recommendedProducts});
+  return defer({env});
 }
 
 export default function Homepage() {
   /** @type {LoaderReturnData} */
   const data = useLoaderData();
+  console.log("env", data.env);
+  const line_login_url = `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${data.env.CLIENT_ID}&redirect_uri=${data.env.REDIRECT_URI}&state=12345abcde&scope=profile%20openid%20email`;
+  
   return (
     <div className="home">
-      <FeaturedCollection collection={data.featuredCollection} />
-      <RecommendedProducts products={data.recommendedProducts} />
+      <h1>
+        <a href={line_login_url}>Sign in with LINE Login.</a>
+      </h1>
     </div>
   );
 }
