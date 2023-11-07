@@ -12,8 +12,8 @@ export const meta = () => {
 export async function loader({request, context}) {
 
   /** LINE access token endpoint - 
-      https://developers.line.biz/ja/reference/line-login/#issue-access-token
-  */
+   *  https://developers.line.biz/ja/reference/line-login/#issue-access-token
+   */
   const lineAccessTokenUrl = new URL(`https://api.line.me/oauth2/v2.1/token`);
   const code = new URL(request.url).searchParams.get('code');
   const state = new URL(request.url).searchParams.get('state');
@@ -50,7 +50,31 @@ export async function loader({request, context}) {
   context.session.set('line_id_token', id_token);
   context.session.set('line_refresh_token', refresh_token);
 
-  return defer({request, context, access_token, expires_in, id_token, refresh_token});
+  /** LINE ID token verify endpoint -
+   * https://developers.line.biz/ja/reference/line-login/#verify-id-token
+   */
+  const lineIdTokenVerifyUrl = new URL(`https://api.line.me/oauth2/v2.1/verify`);
+
+  const body2 = new URLSearchParams();
+  body2.set('id_token', id_token);
+  body2.append('client_id', context.env.LINELOGIN_CLIENTID);
+
+  const response2 = await fetch(lineIdTokenVerifyUrl, {
+    method: 'POST',
+    headers,
+    body2,
+  });
+
+  if (!response2.ok) {
+    throw new Error(await response2.text());
+  }
+
+  const {sub, name, email} = await response2.json();
+  context.session.set('line_id', sub);
+  context.session.set('line_name', name);
+  context.session.set('line_email', email);
+
+  return defer({request, context, access_token, expires_in, id_token, refresh_token, sub, name, email});
 }
 
 export default function Login() {
