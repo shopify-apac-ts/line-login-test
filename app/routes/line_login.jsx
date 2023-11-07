@@ -62,8 +62,10 @@ export async function loader({request, context}) {
   const response2 = await fetch(lineIdTokenVerifyUrl, {
     method: 'POST',
     headers,
-    body2,
+    body: body2,
   });
+
+  console.log("response2", response2);
 
   if (!response2.ok) {
     throw new Error(await response2.text());
