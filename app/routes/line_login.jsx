@@ -12,7 +12,7 @@ export default function Login() {
 
   return (
     <div className="login">
-      <h1>Sign in with LINE.</h1>
+      <h1>Sign in with LINE Login.</h1>
     </div>
   );
 }
