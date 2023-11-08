@@ -15,21 +15,21 @@ export const meta = () => {
  */
 export async function loader({context}) {
   const env = context.env;
-  return defer({env});
+  const encoded_redirect_uri = encodeURIComponent(env.LINELOGIN_REDIRECT_URI);
+  const line_login_url = `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${env.LINELOGIN_CLIENTID}&redirect_uri=${encoded_redirect_uri}&state=12345abcde&scope=profile%20openid%20email`;
+
+  return defer({env, line_login_url});
 }
 
 export default function Homepage() {
   /** @type {LoaderReturnData} */
   const data = useLoaderData();
-  const encoded_redirect_uri = encodeURIComponent(data.env.LINELOGIN_REDIRECT_URI);
-
-  const line_login_url = `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${data.env.LINELOGIN_CLIENTID}&redirect_uri=${encoded_redirect_uri}&state=12345abcde&scope=profile%20openid%20email`;
-  console.log("line_login_url", line_login_url);
+  console.log("line_login_url", data.line_login_url);
 
   return (
     <div className="home">
       <h1>
-        <a href={line_login_url}>
+        <a href={data.line_login_url}>
           <img src="https://cdn.shopify.com/s/files/1/0812/5399/0422/files/btn_login_base.png?v=1699401536" />
           <p>Sign in with LINE Login.</p>
         </a>
