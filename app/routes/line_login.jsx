@@ -1,6 +1,7 @@
 import {json, redirect, defer} from '@shopify/remix-oxygen';
 import {Form, Link, useActionData, useLoaderData} from '@remix-run/react';
-import { Multipass } from '~/lib/multipass';
+//import { Multipass } from '~/lib/multipass';
+import { Multipass } from '@nobu-shopify/multipass';
 
 /**
  * @type {MetaFunction}

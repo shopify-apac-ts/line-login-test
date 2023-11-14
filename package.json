@@ -12,12 +12,12 @@
   },
   "prettier": "@shopify/prettier-config",
   "dependencies": {
+    "@nobu-shopify/multipass": "^1.0.0",
     "@remix-run/react": "2.1.0",
     "@shopify/cli": "3.50.0",
     "@shopify/cli-hydrogen": "^6.0.0",
     "@shopify/hydrogen": "^2023.10.0",
     "@shopify/remix-oxygen": "^2.0.0",
-    "crypto-js": "^4.2.0",
     "graphql": "^16.6.0",
     "graphql-tag": "^2.12.6",
     "isbot": "^3.6.6",
